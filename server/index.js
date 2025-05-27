@@ -2,13 +2,13 @@
 
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 // Handlers
 const { getCompanies } = require("./handlers/getCompanies");
 const { getCompanyById } = require("./handlers/getCompanyById");
 const { getCompanyByName } = require("./handlers/getCompanyByName");
 const { getItemById } = require("./handlers/getItemById");
-
 const { getItems } = require("./handlers/getItems");
 const { getBodyLocations } = require("./handlers/getBodyLocations");
 const { getCategories } = require("./handlers/getCategories");
@@ -20,7 +20,10 @@ const { getNumberInStock } = require("./handlers/getNumberInStock");
 
 const PORT = 4000;
 
-express()
+const app = express();
+app
+  .use(cors())
+
   .use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Methods",
@@ -32,6 +35,7 @@ express()
     );
     next();
   })
+
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(express.json())
@@ -40,31 +44,31 @@ express()
 
   /////////// REST endpoints:////////////
 
-  //Companies
+  // Companies
   .get("/companies", getCompanies)
   .get("/companies/id/:id", getCompanyById)
   .get("/companies/name/:name", getCompanyByName)
 
-  //Items
+  // Items
   .get("/items", getItems)
   .get("/items/id/:id", getItemById)
   .get("/items/id/:id/stock", getNumberInStock)
 
-  //get Body Locations
+  // Body Locations
   .get("/body-locations", getBodyLocations)
-  // Categories
 
+  // Categories
   .get("/categories", getCategories)
 
-  //Submit order
+  // Submit order
   .post("/order", createOrder)
 
-  //Cart
+  // Cart
   .post("/cart", cartHandler)
-  .get("/cart", getCart) // Get cart
-  .put("/cart/manage", cartHandler) // Add or remove items from cart
+  .get("/cart", getCart)
+  .put("/cart/manage", cartHandler)
 
-  //Delete order
+  // Delete order
   .delete("/delete-order/:order", deleteOrder)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

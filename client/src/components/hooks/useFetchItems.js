@@ -4,9 +4,10 @@ const useFetchItems = () => {
   const [items, setItems] = useState(null);
   const [categories, setCategories] = useState([]);
   const [bodyLocations, setBodyLocations] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    fetch("/items")
+    fetch(`${API_URL}/items`)
       .then((response) => response.json())
       .then((data) => {
         setItems(data.items);
@@ -23,7 +24,7 @@ const useFetchItems = () => {
         setBodyLocations(uniqueBodyLocations);
       })
       .catch((error) => console.error("Error fetching items:", error));
-  }, []);
+  }, [API_URL]);
 
   return { items, categories, bodyLocations };
 };

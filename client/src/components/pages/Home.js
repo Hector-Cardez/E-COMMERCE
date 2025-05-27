@@ -1,22 +1,22 @@
 import styled from "styled-components";
 import "../styles/Home.css";
-import logoImage from "../../image-icon/logo.png";
+import logoImage from "../../../image-icon/logo.png";
 //component that holds the code for the home page (first seen when page opens) elements
 
 const Home = () => {
   return (
     <>
       <StyledDiv>
-        <div class="containerHome">
-          <h2 class="titleHome">
-            <span class="title-word title-word-1">Wel</span>
-            <span class="title-word title-word-2">come</span>
-            <span class="title-word title-word-3">to</span>
-            <span class="title-word title-word-4">Sportlab</span>
+        <div className="containerHome">
+          <h2 className="titleHome">
+            <span className="title-word title-word-1">Wel</span>
+            <span className="title-word title-word-2">come</span>
+            <span className="title-word title-word-3">to</span>
+            <span className="title-word title-word-4">Sportlab</span>
           </h2>
         </div>
         <StyledImgDiv>
-          <div class="img-box">
+          <div className="img-box">
             <Logo src={logoImage} alt="Sportlab Logo" />
           </div>
         </StyledImgDiv>

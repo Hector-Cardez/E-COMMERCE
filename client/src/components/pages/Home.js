@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import "../styles/Home.css";
-import logoImage from "../../../image-icon/logo.png";
+import logoImage from "../../image-icon/logo.png";
 //component that holds the code for the home page (first seen when page opens) elements
 
 const Home = () => {

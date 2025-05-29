@@ -1,1 +1,30 @@
-.env
+# Node modules
+client/node_modules/
+server/node_modules/
+
+# Logs
+*.log
+
+# Environment variables
+client/.env
+server/.env
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Build outputs
+client/build/
+server/dist/
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Dependency locks (optional – depends on team preferences)
+client/package-lock.json
+server/package-lock.json
+client/yarn.lock
+server/yarn.lock
+
+

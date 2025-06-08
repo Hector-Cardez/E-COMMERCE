@@ -9,7 +9,7 @@ const Home = () => {
       <StyledDiv>
         <div className="containerHome">
           <h2 className="titleHome">
-            <span className="title-word title-word-1">Wel</span>
+            <span className="title-word title-word-1">TESTTESTWel</span>
             <span className="title-word title-word-2">come</span>
             <span className="title-word title-word-3">to</span>
             <span className="title-word title-word-4">Sportlab</span>

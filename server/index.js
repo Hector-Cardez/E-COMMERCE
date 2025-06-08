@@ -65,7 +65,6 @@ app
 
   // Cart
   .post("/cart", cartHandler) // <-- only POST, handles add & remove via action in body
-  // Removed .put("/cart/manage", cartHandler) to avoid 405 error
 
   // Delete order
   .delete("/delete-order/:order", deleteOrder)

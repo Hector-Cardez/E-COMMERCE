@@ -5,7 +5,10 @@ const CartButton = ({ itemId, action, quantity }) => {
     //console.log("Button clicked:", { itemId, action }); //////////////
 
     const userId = "e62a17e5-9c48-4a71-b7d8-1e2e7c6fcf3b"; // Constant User ID
-    const url = action === "add" ? "/cart" : "/cart/manage"; // Determine URL based on action
+    const API_BASE_URL = "https://e-commerce-backend.onrender.com"; // MODIFY THIS IF WORKING LOCALHOST/SERRVER
+
+    const url =
+      action === "add" ? `${API_BASE_URL}/cart` : `${API_BASE_URL}/cart/manage`;
 
     try {
       const response = await fetch(url, {

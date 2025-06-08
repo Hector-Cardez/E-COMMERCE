@@ -64,7 +64,8 @@ app
   .post("/order", createOrder)
 
   // Cart
-  .post("/cart", cartHandler) // <-- only POST, handles add & remove via action in body
+  .post("/cart", cartHandler) // <-- only POST, handles add & remove in body
+  .get("/cart/:userId", getCart)
 
   // Delete order
   .delete("/delete-order/:order", deleteOrder)

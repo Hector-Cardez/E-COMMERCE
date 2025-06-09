@@ -29,6 +29,11 @@ const CartButton = ({ itemId, action, quantity }) => {
       }
 
       const data = await response.json();
+      console.log({
+        status: response.status,
+        message: data.message,
+        cartId: data.cartId || null,
+      });
     } catch (error) {
       console.error("Error:", error);
     }

@@ -20,9 +20,12 @@ const getCart = async (req, res) => {
 
   const client = new MongoClient(MONGO_URI);
   try {
+    await client.connect();
     const db = client.db("E-Commerce");
+
     let cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
 
+    // Create empty cart if not found
     if (!cart) {
       cart = { userId, items: [] };
       await db.collection(CARTS_COLLECTION).insertOne(cart);

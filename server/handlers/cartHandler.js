@@ -34,24 +34,45 @@ const cartHandler = async (req, res) => {
     // Check if cart exists
     let cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
 
+    // Create cart and add item if cart doesn't exist and action is 'add'
+    if (!cart && action === "add") {
+      const item = await db
+        .collection("items")
+        .findOne({ _id: parseInt(itemId) });
+
+      if (!item || item.numInStock <= 0) {
+        return res.status(400).json({
+          status: 400,
+          message: "Item not found or out of stock.",
+        });
+      }
+
+      const newItem = {
+        itemId,
+        quantity,
+        itemImageSrc: item.imageSrc,
+        itemName: item.name,
+        itemPrice: item.price,
+      };
+
+      const newCart = {
+        userId,
+        items: [newItem],
+      };
+
+      await db.collection(CARTS_COLLECTION).insertOne(newCart);
+
+      return res.status(201).json({
+        status: 201,
+        message: "Cart created and item added successfully.",
+        cart: newCart,
+      });
+    }
+
     if (!cart && action !== "add") {
       return res.status(404).json({
         status: 404,
         message: `Error, cannot find cart for user ${userId}.`,
-      });
-    }
-
-    // Create a new cart if cart doesn't exist
-    if (!cart && action === "add") {
-      const newCart = {
-        userId,
-        items: [],
-      };
-      const result = await db.collection(CARTS_COLLECTION).insertOne(newCart);
-      return res.status(201).json({
-        status: 201,
-        cartId: result.insertedId,
-        message: "Cart created successfully.",
       });
     }
 
@@ -65,7 +86,8 @@ const cartHandler = async (req, res) => {
       const itemName = item.name;
       const itemPrice = item.price;
       const isItemInStock = item.numInStock > 0;
-      const isQuantityTooMuch = () => existingItem.quantity > item.numInStock;
+      const isQuantityTooMuch = () =>
+        existingItem && existingItem.quantity + quantity > item.numInStock;
 
       if (!isItemInStock) {
         return res.status(400).json({
@@ -74,6 +96,7 @@ const cartHandler = async (req, res) => {
           item: item.name,
         });
       }
+
       if (existingItem && isQuantityTooMuch()) {
         return res.status(400).json({
           status: 400,
@@ -83,7 +106,7 @@ const cartHandler = async (req, res) => {
         });
       }
 
-      // Increase quantity if item is in stock
+      // Increase quantity if item exists
       if (existingItem && isItemInStock) {
         await db
           .collection(CARTS_COLLECTION)
@@ -91,6 +114,7 @@ const cartHandler = async (req, res) => {
             { userId, "items.itemId": itemId },
             { $inc: { "items.$.quantity": quantity } }
           );
+
         return res.status(200).json({
           status: 200,
           message: "Item quantity updated successfully.",
@@ -121,11 +145,9 @@ const cartHandler = async (req, res) => {
 
     // Removing an Item
     if (action === "remove") {
-      // Check if the item exists in the cart
       const existingItem = cart.items.find((item) => item.itemId === itemId);
 
       if (existingItem) {
-        // Decrease the quantity
         if (existingItem.quantity > quantity) {
           await db
             .collection(CARTS_COLLECTION)
@@ -133,15 +155,16 @@ const cartHandler = async (req, res) => {
               { userId, "items.itemId": itemId },
               { $inc: { "items.$.quantity": -quantity } }
             );
+
           return res.status(200).json({
             status: 200,
             message: "Item quantity decreased successfully.",
           });
         } else {
-          // Remove the item if quantity drops to 0 or below
           await db
             .collection(CARTS_COLLECTION)
             .updateOne({ userId }, { $pull: { items: { itemId } } });
+
           return res.status(200).json({
             status: 200,
             message: "Item removed from cart successfully.",

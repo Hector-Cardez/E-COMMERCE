@@ -5,8 +5,9 @@ const CartButton = ({ itemId, action, quantity }) => {
     //console.log("Button clicked:", { itemId, action }); //////////////
 
     const userId = "e62a17e5-9c48-4a71-b7d8-1e2e7c6fcf3b"; // Constant User ID
-    // Use the API URL from .env file for flexibility and correctness
-    const API_BASE_URL = process.env.REACT_APP_API_URL;
+    const API_BASE_URL =
+      process.env.REACT_APP_API_URL ||
+      "https://e-commerce-backend.onrender.com"; // Use env or fallback
 
     // Always use the same endpoint for cart actions
     const url = `${API_BASE_URL}/cart`;

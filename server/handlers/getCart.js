@@ -1,31 +1,45 @@
 "use strict";
 
 const { MongoClient } = require("mongodb");
+const { validate: uuidValidate } = require("uuid");
 require("dotenv").config();
-
 const { MONGO_URI } = process.env;
-const CARTS_COLLECTION = "carts";
-const userId = "e62a17e5-9c48-4a71-b7d8-1e2e7c6fcf3b";
 
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+const CARTS_COLLECTION = "carts";
 
 const getCart = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const { userId } = req.params;
 
+  // Validate userId UUID
+  if (!userId || !uuidValidate(userId)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Invalid or missing userId in params.",
+    });
+  }
+
+  const client = new MongoClient(MONGO_URI);
   try {
-    await client.connect();
     const db = client.db("E-Commerce");
-    let cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
-    if (cart)
-      return res
-        .status(200)
-        .json({ status: 200, message: "Here is your cart.", cart: cart });
+    const cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({
+        status: 404,
+        message: "Cart not found.",
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      cart,
+    });
   } catch (error) {
-    console.error("Error retrieving cart:", error);
-    res.status(500).json({ status: 500, error: "Failed to retrieve cart" });
+    console.error(error);
+    return res.status(500).json({
+      status: 500,
+      message: error.message,
+    });
   } finally {
     await client.close();
   }

@@ -15,7 +15,7 @@ const { getCategories } = require("./handlers/getCategories");
 const { createOrder } = require("./handlers/createOrder");
 const { cartHandler } = require("./handlers/cartHandler");
 const { deleteOrder } = require("./handlers/deleteOrder");
-const { getCart } = require("./handlers/getCart");
+const { getCart } = require("./handlers/getCart"); // <-- added getCart handler
 const { getNumberInStock } = require("./handlers/getNumberInStock");
 
 const PORT = 4000;
@@ -63,9 +63,11 @@ app
   // Submit order
   .post("/order", createOrder)
 
-  // Cart
-  .post("/cart", cartHandler) // <-- only POST, handles add & remove in body
-  .get("/cart/:userId", getCart)
+  // Cart POST (add & remove)
+  .post("/cart", cartHandler) // <-- only POST, handles add & remove via action in body
+
+  // Cart GET (get user's cart)
+  .get("/cart/:userId", getCart) // <-- added GET cart endpoint
 
   // Delete order
   .delete("/delete-order/:order", deleteOrder)

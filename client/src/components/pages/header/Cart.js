@@ -51,7 +51,6 @@ const Cart = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Cart emptied:", data.message);
         setCart({ items: [] }); // Update UI to reflect empty cart
       })
       .catch((error) => console.error("Error emptying cart:", error));

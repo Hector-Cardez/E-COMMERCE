@@ -2,8 +2,6 @@ import React from "react";
 
 const CartButton = ({ itemId, action, quantity }) => {
   const handleCartAction = async () => {
-    //console.log("Button clicked:", { itemId, action }); //////////////
-
     const userId = "e62a17e5-9c48-4a71-b7d8-1e2e7c6fcf3b"; // Constant User ID
     const API_BASE_URL =
       process.env.REACT_APP_API_URL ||
@@ -31,11 +29,6 @@ const CartButton = ({ itemId, action, quantity }) => {
       }
 
       const data = await response.json();
-      console.log({
-        status: response.status,
-        message: data.message,
-        cartId: data.cartId || null,
-      });
     } catch (error) {
       console.error("Error:", error);
     }

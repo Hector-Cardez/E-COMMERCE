@@ -17,6 +17,7 @@ const { cartHandler } = require("./handlers/cartHandler");
 const { deleteOrder } = require("./handlers/deleteOrder");
 const { getCart } = require("./handlers/getCart"); // <-- added getCart handler
 const { getNumberInStock } = require("./handlers/getNumberInStock");
+const { deleteCart } = require("./handlers/deleteCart");
 
 const PORT = 4000;
 
@@ -71,5 +72,8 @@ app
 
   // Delete order
   .delete("/delete-order/:order", deleteOrder)
+
+  // Delete Cart
+  .delete("/cart/:userId", deleteCart)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

@@ -12,6 +12,7 @@ const Cart = () => {
   const API_BASE_URL =
     process.env.REACT_APP_API_URL || "https://e-commerce-backend.onrender.com";
 
+  // Fetch cart data from backend when component mounts
   useEffect(() => {
     fetch(`${API_BASE_URL}/cart/${userId}`)
       .then((response) => {
@@ -41,6 +42,19 @@ const Cart = () => {
 
   const handleCancelOrder = () => {
     navigate("/items");
+  };
+
+  // Clears all items in the user's cart
+  const handleEmptyCart = () => {
+    fetch(`${API_BASE_URL}/cart/${userId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Cart emptied:", data.message);
+        setCart({ items: [] }); // Update UI to reflect empty cart
+      })
+      .catch((error) => console.error("Error emptying cart:", error));
   };
 
   return (
@@ -81,6 +95,9 @@ const Cart = () => {
         </button>
         <button onClick={handleCancelOrder} className="cart-action-button">
           Cancel Order
+        </button>
+        <button onClick={handleEmptyCart} className="cart-action-button">
+          Empty Cart
         </button>
       </div>
     </div>

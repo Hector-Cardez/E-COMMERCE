@@ -21,13 +21,11 @@ const getCart = async (req, res) => {
   const client = new MongoClient(MONGO_URI);
   try {
     const db = client.db("E-Commerce");
-    const cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
+    let cart = await db.collection(CARTS_COLLECTION).findOne({ userId });
 
     if (!cart) {
-      return res.status(404).json({
-        status: 404,
-        message: "Cart not found.",
-      });
+      cart = { userId, items: [] };
+      await db.collection(CARTS_COLLECTION).insertOne(cart);
     }
 
     return res.status(200).json({

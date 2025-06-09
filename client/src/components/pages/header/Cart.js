@@ -54,7 +54,6 @@ const Cart = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("Cart emptied:", data);
         setCart({ items: [] }); // Clear cart from frontend
       })
       .catch((error) => {
